@@ -22,7 +22,7 @@
 */
 
 #include <DCF77.h>       //https://github.com/thijse/Arduino-Libraries/downloads
-#include <Time.h>        //http://www.arduino.cc/playground/Code/Time
+#include <Time.h>        //http://playground.arduino.cc/code/time
 #include <Utils.h>
 
 #define _DCF77_VERSION 1_0_0 // software version of this library
