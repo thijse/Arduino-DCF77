@@ -8,6 +8,15 @@
   the internal clock. In order for this example to give clear output,
   make sure that you disable logging  from the DCF library. You can 
   do this by commenting out   #define VERBOSE_DEBUG 1   in Utils.cpp. 
+  
+  NOTE: If you used a package manager to download the DCF77 library, 
+  make sure have also fetched these libraries:
+
+ * Time 
+
+ A package that includes all referenced libraries can be found at:
+ https://github.com/thijse/Zipballs/blob/master/DCF77/DCF77.zip?raw=true
+  
  */
 
 #include <DCF77.h>       //https://github.com/thijse/Arduino-Libraries/downloads

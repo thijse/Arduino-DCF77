@@ -10,6 +10,15 @@
   In order for this example to give output from the DCF library,
   make sure that logging is turned on in the DCF library. You can 
   do this by adding the   #define VERBOSE_DEBUG 1   in Utils.cpp. 
+  
+  NOTE: If you used a package manager to download the DCF77 library, 
+  make sure have also fetched these libraries:
+
+ * Time 
+
+ A package that includes all referenced libraries can be found at:
+ https://github.com/thijse/Zipballs/blob/master/DCF77/DCF77.zip?raw=true    
+  
  */
 
 

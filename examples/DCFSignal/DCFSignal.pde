@@ -8,6 +8,14 @@
   Pulse-to-Pulse is approximately 1000 ms and pulse with is approx 100ms or 200ms
   The axis underestimates the elapsed time slightly, because a single loop takes a bit
   longer than 10ms.
+  
+  NOTE: If you used a package manager to download the DCF77 library, 
+  make sure have also fetched these libraries:
+
+ * Time 
+
+ A package that includes all referenced libraries can be found at:
+ https://github.com/thijse/Zipballs/blob/master/DCF77/DCF77.zip?raw=true    
 */
 
 #define BLINKPIN 13

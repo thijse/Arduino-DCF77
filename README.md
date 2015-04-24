@@ -12,7 +12,29 @@ The DCF77 Library download. Example sketches have been added to
 
 Additional documentation and full explanations of the samples can be found in these blog 
 posts on DCF Hardware, DCF Signal can be found here:
-http://thijs.elenbaas.net/2012/04/arduino-dcf77-radio-clock-receiver-library/
+[http://thijs.elenbaas.net/2012/04/arduino-dcf77-radio-clock-receiver-library/](http://thijs.elenbaas.net/2012/04/arduino-dcf77-radio-clock-receiver-library/)
+
+
+## Downloading
+
+This package can be downloaded in different manners 
+
+
+- The Arduino Library Manager: [see here how to use it](http://www.arduino.cc/en/guide/libraries#toc3).
+- The PlatformIO package manager: [see here how to use it](http://www.ikravets.com/computer-life/platformio/2014/10/07/integration-of-platformio-library-manager-to-arduino-and-energia-ides).
+- By directly loading fetching the Archive from GitHub: 
+ 1. Go to [https://github.com/thijse/Arduino-DCF77](https://github.com/thijse/Arduino-DCF77)
+ 2. Click the DOWNLOAD ZIP button in the panel on the
+ 3. Rename the uncompressed folder **Arduino-DCF77-master** to **DCF77**.
+ 4. You may need to create the libraries subfolder if its your first library.  
+ 5. Place the **DCF77** library folder in your **arduinosketchfolder/libraries/** folder. 
+ 5. Restart the IDE.
+ 6. For more information, [read this extended manual](http://thijs.elenbaas.net/2012/07/installing-an-arduino-library/)
+- If you want to have a package that includes all referenced libraries, use the pre-packaged library
+ 1. Download the package as a zipfile [here](https://github.com/thijse/Zipballs/blob/master/DCF77/DCF77.zip?raw=true) or as a tarball [here ](https://github.com/thijse/Zipballs/blob/master/DCF77/DCF77.tar.gz?raw=true).
+ 2. Copy the folders inside the **libraries** folder  to you your **arduinosketchfolder/libraries/** folder.
+ 3. Restart the IDE.
+ 3. For more information, [read this extended manual](http://thijs.elenbaas.net/2012/07/installing-an-arduino-library/)
 
 ##Samples
  
@@ -171,5 +193,7 @@ can be found here:
 - [http://www.arduino.cc/en/Main/Libraries](http://www.arduino.cc/en/Main/Libraries)
 - [http://www.arduino.cc/en/Reference/Libraries](http://www.arduino.cc/en/Reference/Libraries) 
 
+## Copyright
 
+DCF77 is provided Copyright © 2013,2014,2015 under LGPL License.
 
