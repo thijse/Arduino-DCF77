@@ -20,7 +20,7 @@
  */
 
 #include "DCF77.h"
-#include "Time.h"
+#include "TimeLib.h"
 
 #define DCF_PIN 2	         // Connection pin to DCF 77 device
 #define DCF_INTERRUPT 0		 // Interrupt number associated with pin

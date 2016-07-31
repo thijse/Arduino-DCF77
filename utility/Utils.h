@@ -6,7 +6,7 @@
 #else
 #include <WProgram.h> 
 #endif
-#include <Time.h>
+#include <TimeLib.h>
 
 #define intDisable()      ({ uint8_t sreg = SREG; cli(); sreg; })
 #define intRestore(sreg)  SREG = sreg 
