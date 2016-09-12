@@ -1,5 +1,6 @@
 {
   "name": "DCF77",
+  "version": "1.0.0",
   "keywords": "dcf77, time",
   "description": "Read and decode the atomic time broadcasted by the DCF77 radiostation.",
   "repository":
