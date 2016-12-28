@@ -23,6 +23,7 @@ private:
     bool initialized;   
     static int dCF77Pin;
     static int dCFinterrupt;
+	static int dCFsplitTime;
     static byte pulseStart;
 
     // DCF77 and internal timestamps
@@ -87,6 +88,7 @@ private:
 public: 
     // Public Functions
     DCF77(int DCF77Pin, int DCFinterrupt, bool OnRisingFlank=true); 
+	static void setSplitTime(int shortPulseLength, int longPulseLength);
     
     static time_t getTime(void);
     static time_t getUTCTime(void);

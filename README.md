@@ -106,7 +106,8 @@ The DCFF77 directory contains the DCFF77 library and some example sketches
   coming from the DCF decoder. While the DCF specification says that pulses 
   should be either 100 or 200 ms, you will probably see longer pulse lengths. 
   For optimal distinction between long and short pulses use the output of this 
-  sketch to set the parameter #define DCFSplitTime in DCF77.h to (Tshort+Tlong)/2.
+  sketch to set the pulse length with 
+  DCF.setSplitTime(short_pulse_length, long_pulse_length);
 
 - DCFBinaryStream.pde
 
@@ -151,6 +152,7 @@ can be found here:
     void setup() {
       Serial.begin(9600);
       DCF.Start();
+      // DCF.setSplitTime(80, 180);
       Serial.println("Waiting for DCF77 time ... ");
       Serial.println("It will take at least 2 minutes before a first time update.");
     }

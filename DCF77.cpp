@@ -37,6 +37,7 @@ DCF77::DCF77(int DCF77Pin, int DCFinterrupt, bool OnRisingFlank)
 	dCF77Pin     = DCF77Pin;
 	dCFinterrupt = DCFinterrupt;	
 	pulseStart   = OnRisingFlank ? HIGH : LOW;
+	dCFsplitTime = DCFSplitTime;
 	
 	if (!initialized) {  
 		pinMode(dCF77Pin, INPUT);	
@@ -62,6 +63,11 @@ void DCF77::initialize(void)
 	flags.parityHour      = 0;
 	flags.parityMin       = 0;
 	CEST				  = 0;
+}
+
+void DCF77::setSplitTime(int shortPulseLength, int longPulseLength)
+{
+	dCFsplitTime = (shortPulseLength+longPulseLength)/2;
 }
 
 /**
@@ -127,7 +133,7 @@ void DCF77::int0handler() {
 			}         
 			PreviousLeadingEdge = leadingEdge;       
 			// Distinguish between long and short pulses
-			if (difference < DCFSplitTime) { appendSignal(0); } else { appendSignal(1); }
+			if (difference < dCFsplitTime) { appendSignal(0); } else { appendSignal(1); }
 			Up = false;	 
 		}
 	}  
@@ -333,6 +339,7 @@ time_t DCF77::getUTCTime(void)
  */
 int DCF77::dCF77Pin=0;
 int DCF77::dCFinterrupt=0;
+int DCF77::dCFsplitTime=DCFSplitTime;
 byte DCF77::pulseStart=HIGH;
 
 // Parameters shared between interupt loop and main loop
