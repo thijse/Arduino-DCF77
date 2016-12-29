@@ -3,24 +3,24 @@
  * example code illustrating time synced from a DCF77 receiver
  * Thijs Elenbaas, 2012
  * This example code is in the public domain.
- 
+
   This example shows how to fetch a DCF77 time and synchronize
   the internal clock. In order for this example to give clear output,
-  make sure that you disable logging  from the DCF library. You can 
-  do this by commenting out   #define VERBOSE_DEBUG 1   in Utils.cpp. 
-  
-  NOTE: If you used a package manager to download the DCF77 library, 
+  make sure that you disable logging  from the DCF library. You can
+  do this by commenting out   #define VERBOSE_DEBUG 1   in Utils.cpp.
+
+  NOTE: If you used a package manager to download the DCF77 library,
   make sure have also fetched these libraries:
 
- * Time 
+ * Time
 
  A package that includes all referenced libraries can be found at:
- https://github.com/thijse/Zipballs/blob/master/DCF77/DCF77.zip?raw=true  
-  
+ https://github.com/thijse/Zipballs/blob/master/DCF77/DCF77.zip?raw=true
+
  */
 
 #include "DCF77.h"
-#include "Time.h"
+#include "TimeLib.h"
 
 #define DCF_PIN 2	         // Connection pin to DCF 77 device
 #define DCF_INTERRUPT 0		 // Interrupt number associated with pin
@@ -30,7 +30,7 @@ DCF77 DCF = DCF77(DCF_PIN,DCF_INTERRUPT);
 
 
 void setup() {
-  Serial.begin(9600); 
+  Serial.begin(9600);
   DCF.Start();
   Serial.println("Waiting for DCF77 time ... ");
   Serial.println("It will take at least 2 minutes until a first update can be processed.");
@@ -43,8 +43,8 @@ void loop() {
   {
     Serial.println("Time is updated");
     setTime(DCFtime);
-  }	
-  digitalClockDisplay();  
+  }
+  digitalClockDisplay();
 }
 
 void digitalClockDisplay(){
@@ -57,8 +57,8 @@ void digitalClockDisplay(){
   Serial.print(" ");
   Serial.print(month());
   Serial.print(" ");
-  Serial.print(year()); 
-  Serial.println(); 
+  Serial.print(year());
+  Serial.println();
 }
 
 void printDigits(int digits){
