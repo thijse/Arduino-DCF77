@@ -6,24 +6,24 @@
 
   This example shows how to fetch a DCF77 time and synchronize
   the internal clock. In order for this example to give clear output,
-  make sure that you disable logging  from the DCF library. You can 
-  do this by commenting out   #define VERBOSE_DEBUG 1   in Utils.cpp. 
-  
-  NOTE: If you used a package manager to download the DCF77 library, 
+  make sure that you disable logging  from the DCF library. You can
+  do this by commenting out   #define VERBOSE_DEBUG 1   in Utils.cpp.
+
+  NOTE: If you used a package manager to download the DCF77 library,
   make sure have also fetched these libraries:
 
- * Time 
+ * Time
 
  A package that includes all referenced libraries can be found at:
  https://github.com/thijse/Zipballs/blob/master/DCF77/DCF77.zip?raw=true
-  
+
  */
 
-#include <DCF77.h>       //https://github.com/thijse/Arduino-Libraries/downloads
-#include <Time.h>        //http://www.arduino.cc/playground/Code/Time
+#include <DCF77.h>         //https://github.com/thijse/Arduino-Libraries/downloads
+#include <TimeLib.h>       //http://www.arduino.cc/playground/Code/Time
 
-#define DCF_PIN 2	         // Connection pin to DCF 77 device
-#define DCF_INTERRUPT 0		 // Interrupt number associated with pin
+#define DCF_PIN 2          // Connection pin to DCF 77 device
+#define DCF_INTERRUPT 0    // Interrupt number associated with pin
 
 time_t prevDisplay = 0;          // when the digital clock was displayed
 time_t time;
@@ -31,7 +31,7 @@ DCF77 DCF = DCF77(DCF_PIN,DCF_INTERRUPT);
 
 
 void setup() {
-  Serial.begin(9600); 
+  Serial.begin(9600);
   DCF.Start();
   setSyncInterval(30);
   setSyncProvider(getDCFTime);
@@ -40,8 +40,8 @@ void setup() {
 
   Serial.println("Waiting for DCF77 time ... ");
   Serial.println("It will take at least 2 minutes until a first update can be processed.");
-  while(timeStatus()== timeNotSet) { 
-     // wait until the time is set by the sync provider     
+  while(timeStatus()== timeNotSet) {
+     // wait until the time is set by the sync provider
      Serial.print(".");
      delay(2000);
   }
@@ -49,11 +49,11 @@ void setup() {
 
 
 void loop()
-{  
+{
   if( now() != prevDisplay) //update the display only if the time has changed
   {
     prevDisplay = now();
-    digitalClockDisplay();  
+    digitalClockDisplay();
   }
 }
 
@@ -68,8 +68,8 @@ void digitalClockDisplay(){
   Serial.print(" ");
   Serial.print(month());
   Serial.print(" ");
-  Serial.print(year()); 
-  Serial.println(); 
+  Serial.print(year());
+  Serial.println();
 }
 
 void printDigits(int digits){
@@ -81,11 +81,11 @@ void printDigits(int digits){
 }
 
 unsigned long getDCFTime()
-{ 
+{
   time_t DCFtime = DCF.getTime();
   // Indicator that a time check is done
   if (DCFtime!=0) {
-    Serial.print("X");  
+    Serial.print("X");
   }
   return DCFtime;
 }
