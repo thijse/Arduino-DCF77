@@ -140,7 +140,7 @@ can be found here:
 ](http://thijs.elenbaas.net/2012/04/arduino-dcf77-radio-clock-receiver-library/)
     
     #include "DCF77.h"
-    #include "Time.h"
+    #include "TimeLib.h"
     
     #define DCF_PIN 2// Connection pin to DCF 77 device
     #define DCF_INTERRUPT 0  // Interrupt number associated with pin

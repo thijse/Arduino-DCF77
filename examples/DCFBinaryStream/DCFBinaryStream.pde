@@ -23,7 +23,7 @@
 
 
 #include <DCF77.h>       //https://github.com/thijse/Arduino-Libraries/downloads
-#include <Time.h>        //http://www.arduino.cc/playground/Code/Time
+#include <TimeLib.h>        //http://www.arduino.cc/playground/Code/Time
 
 #define DCF_PIN 2	         // Connection pin to DCF 77 device
 #define DCF_INTERRUPT 0		 // Interrupt number associated with pin

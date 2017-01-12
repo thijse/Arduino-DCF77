@@ -6,7 +6,7 @@
 #else
 #include <WProgram.h> 
 #endif
-#include <Time.h>
+#include <TimeLib.h>
 
 #define MIN_TIME 1334102400     // Date: 11-4-2012
 #define MAX_TIME 4102444800     // Date:  1-1-2100
