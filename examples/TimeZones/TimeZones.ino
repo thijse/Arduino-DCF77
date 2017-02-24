@@ -1,7 +1,7 @@
 /*
  * TimeZones.ino
  * example code illustrating time synced from a DCF77 receiver
- * Thijs Elenbaas, 2012
+ * Thijs Elenbaas, 2012-2017
  * This example code is in the public domain.
 
   This example shows how to fetch a DCF77 time and synchronize
@@ -14,11 +14,6 @@
 
  * Time 
  * Timezone
-
- A package that includes all referenced libraries can be found at:
- https://github.com/thijse/Zipballs/blob/master/DCF77/DCF77.zip?raw=true
-
-  
   
  */
 

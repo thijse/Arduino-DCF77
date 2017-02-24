@@ -1,6 +1,6 @@
 /*
  * DCFSignal.ino - DCF77 debug Example
- * Thijs Elenbaas, 2012
+ * Thijs Elenbaas, 2012-2017
  * This example code is in the public domain.
  
   This simple example shows the raw signal coming from the DCF decoder.
@@ -14,8 +14,6 @@
 
  * Time 
 
- A package that includes all referenced libraries can be found at:
- https://github.com/thijse/Zipballs/blob/master/DCF77/DCF77.zip?raw=true    
 */
 
 #define BLINKPIN 13

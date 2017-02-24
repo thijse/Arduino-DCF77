@@ -1,6 +1,6 @@
 /*
  * DCFPulseLength.ino - DCF77 debug Example
- * Thijs Elenbaas, 2012
+ * Thijs Elenbaas, 2012-2017
  * This example code is in the public domain.
  
   This simple example shows the pulse-to-pulse time and pulse lengths
@@ -10,7 +10,8 @@
   100 or 200 ms, we notice longer pulse lengths. This is likely due to to
   the hardware of the decoder. For optimal distinction between long and 
   short pulses in the DCF library, set the parameter 
-  #define DCFSplitTime in DCF77.h to (Tlongpulse+Tlongpulse)/2		  
+  #define DCFSplitTime in DCF77.h to (Tlongpulse+Tlongpulse)/2		
+  
 */
  
 #define BLINKPIN 13
