@@ -14,8 +14,7 @@ script:
   - arduino --verify --board arduino:avr:uno $PWD/examples/DCFPulseLength/DCFPulseLength.ino
   - arduino --verify --board arduino:avr:uno $PWD/examples/DCFSignal/DCFSignal.ino
   - arduino --verify --board arduino:avr:uno $PWD/examples/InternalClockSync/InternalClockSync.ino
-  - arduino --verify --board arduino:avr:uno $PWD/examples/SyncProvider/SyncProvider.ino
-  - arduino --verify --board arduino:avr:uno $PWD/examples/TimeZones/TimeZones.ino
+  - arduino --verify --board arduino:avr:uno $PWD/examples/SyncProvider/SyncProvider.ino  
 notifications:
   email:
     on_success: change
