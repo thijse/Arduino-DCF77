@@ -1,4 +1,6 @@
 # Arduino DCF77 library
+[![Build Status](https://travis-ci.org/thijse/Arduino-DCF77.svg?branch=master)](https://travis-ci.org/thijse/Arduino-DCF77)
+[![License: LGPL v21](https://img.shields.io/badge/License-LGPL%20v2.1-blue.svg)](https://img.shields.io/badge/License-LGPL%20v2.1-blue.svg)
 
 The DCF77 library adds the ability to read and decode the atomic time broadcasted by the 
 DCF77 radiostation. It has been designed to work in conjunction with the Arduino Time 
