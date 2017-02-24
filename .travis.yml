@@ -9,6 +9,7 @@ before_install:
   - sudo ln -s /usr/local/share/arduino/arduino /usr/local/bin/arduino
 install:
   - ln -s $PWD /usr/local/share/arduino/libraries/DCF77
+  - arduino --install-library "Time"
 script:
   - arduino --verify --board arduino:avr:uno $PWD/examples/DCFBinaryStream/DCFBinaryStream.ino
   - arduino --verify --board arduino:avr:uno $PWD/examples/DCFPulseLength/DCFPulseLength.ino
