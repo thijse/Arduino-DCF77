@@ -264,6 +264,7 @@ bool DCF77::processBuffer(void) {
 	// Indicate that there is no filled, unprocessed buffer anymore
 	FilledBufferAvailable = false;  
 	
+
 	/////  End interaction with interrupt driven loop   /////
 
 	//  Calculate parities for checking buffer
@@ -274,6 +275,7 @@ bool DCF77::processBuffer(void) {
 	struct DCF77Buffer *rx_buffer;
 	rx_buffer = (struct DCF77Buffer *)(unsigned long long)&processingBuffer;
 
+	
 	// Check parities
     if (flags.parityMin == rx_buffer->P1  &&
         flags.parityHour == rx_buffer->P2 &&
@@ -327,6 +329,11 @@ time_t DCF77::getUTCTime(void)
 		return(currentTime);
 	}
 }
+
+int DCF77::getSummerTime(void) 
+{
+  return (CEST)?1:0;
+} 
 
 /**
  * Initialize parameters
