@@ -197,5 +197,5 @@ can be found here:
 
 ## Copyright
 
-DCF77 is provided Copyright © 2013,2014,2015 under LGPL License.
+DCF77 is provided Copyright © 2013-2017 under LGPL License.
 
