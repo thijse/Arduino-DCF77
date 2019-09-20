@@ -270,7 +270,6 @@ bool DCF77::processBuffer(void) {
 	//  Calculate parities for checking buffer
 	calculateBufferParities();
 	tmElements_t time;
-	bool proccessedSucces;
 
 	struct DCF77Buffer *rx_buffer;
 	rx_buffer = (struct DCF77Buffer *)(unsigned long long)&processingBuffer;
