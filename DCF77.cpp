@@ -25,7 +25,7 @@
 #include <TimeLib.h>        //http://playground.arduino.cc/code/time
 #include <Utils.h>
 
-#define _DCF77_VERSION 1_0_0 // software version of this library
+#define _DCF77_VERSION 1_0_1 // software version of this library
 
 using namespace Utils;
 
@@ -92,7 +92,7 @@ inline void DCF77::bufferinit(void)
 /**
  * Interrupt handler that processes up-down flanks into pulses and stores these in the buffer
  */
-void DCF77::int0handler() {
+ICACHE_RAM_ATTR void DCF77::int0handler() {
 	int flankTime = millis();
 	byte sensorValue = digitalRead(dCF77Pin);
 
