@@ -25,21 +25,22 @@
 #include <TimeLib.h>        //http://playground.arduino.cc/code/time
 #include <Utils.h>
 
-#define _DCF77_VERSION 1_0_0 // software version of this library
+#define _DCF77_VERSION 1_0_1 // software version of this library
 
 using namespace Utils;
 
 /**
  * Constructor
  */
-DCF77::DCF77(int DCF77Pin, int DCFinterrupt, bool OnRisingFlank) 
+DCF77::DCF77(int DCF77Pin, int DCFinterrupt, bool OnRisingFlank, bool EnableInputPullup) 
 {
 	dCF77Pin     = DCF77Pin;
 	dCFinterrupt = DCFinterrupt;	
 	pulseStart   = OnRisingFlank ? HIGH : LOW;
+	dCF77PinMode = EnableInputPullup ? INPUT_PULLUP : INPUT;
 	
 	if (!initialized) {  
-		pinMode(dCF77Pin, INPUT);	
+		pinMode(dCF77Pin, dCF77PinMode);
 		initialize();
 	  }
 	initialized = true;
@@ -341,6 +342,7 @@ int DCF77::getSummerTime(void)
 int DCF77::dCF77Pin=0;
 int DCF77::dCFinterrupt=0;
 byte DCF77::pulseStart=HIGH;
+byte DCF77::dCF77PinMode=INPUT;
 
 // Parameters shared between interupt loop and main loop
 
