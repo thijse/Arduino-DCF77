@@ -6,9 +6,15 @@
 #else
 #include <WProgram.h> 
 #endif
-#include <TimeLib.h>
+#ifndef DCF77_USE_RTC
+  #include <TimeLib.h>
+#else
+  #include <time.h>
+  #define SECS_PER_MIN  ((time_t)(60UL))
+  #define SECS_PER_HOUR ((time_t)(3600UL))
+#endif
 
-#define MIN_TIME 1334102400     // Date: 11-4-2012
+#define MIN_TIME 1586270068     // Date:  7-4-2020
 #define MAX_TIME 4102444800     // Date:  1-1-2100
 
 #define DCFRejectionTime 700    // Pulse-to-Pulse rejection time. 
@@ -25,6 +31,7 @@ private:
     static int dCFinterrupt;
     static byte pulseStart;
     static byte dCF77PinMode;
+    static bool compareToUTC;
 
     // DCF77 and internal timestamps
     static time_t previousUpdatedTime;
@@ -85,10 +92,14 @@ private:
     bool static processBuffer(void);
     void static appendSignal(unsigned char signal);
 
+    //RTC callback
+    static time_t altNow();
+    static time_t (*fptr_CallbackFunctionRTC)();
+
 public: 
     // Public Functions
 
-    DCF77(int DCF77Pin, int DCFinterrupt, bool OnRisingFlank=true, bool EnableInputPullup=false); 
+    DCF77(int DCF77Pin, int DCFinterrupt, bool OnRisingFlank=true, bool EnableInputPullup=false, bool CompareToUTC=false);
     
     static time_t getTime(void);
     static time_t getUTCTime(void);
@@ -96,6 +107,7 @@ public:
     static void Stop(void);
     static void int0handler();
     static int getSummerTime(); 
+    static void setCallbackFunctionRTC( time_t (*fptr)() ); 
  };
 
 #endif

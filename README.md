@@ -190,6 +190,24 @@ can be found here:
       Serial.print(digits);
     }
 
+## Changes in 2020 by DCEM
+The constructor now additionally accepts:
+ 
+- EnableInputPullup
+- CompareToUTC
+
+Allow to use RTC instead of TimeLib.
+
+To archive this, you have to `#define DCF77_USE_RTC` before `#include "DCF77.h"`.  
+This should work with any RTC. Since the DCF77 library needs to get the time from the RTC you need to put
+the function call inside the `RTC_Callback_Wrapper()`. Look at the ZeroRTCSync example for more details.
+
+Added example sketch:
+
+- ZeroRTCSync.ino
+
+  It shows how to fetch a DCF77 time and synchronize the internal RTC of an Arduino Zero. 
+
 ## On using and modifying libraries
 
 - [http://www.arduino.cc/en/Main/Libraries](http://www.arduino.cc/en/Main/Libraries)
