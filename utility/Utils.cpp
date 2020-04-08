@@ -2,7 +2,7 @@
 
 namespace Utils {
 	
-#define DEBUG_BLINK_PIN 13	     // Connected to debug led
+#define DEBUG_BLINK_PIN LED_BUILTIN	     // Connected to debug led
 //#define VERBOSE_DEBUG 1	     // Verbose
 
 	void LogLn(char*s)

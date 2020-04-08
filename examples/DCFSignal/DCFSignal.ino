@@ -16,8 +16,11 @@
 
 */
 
-#define BLINKPIN 13
+#define BLINKPIN LED_BUILTIN
 #define DCF77PIN 2
+#ifdef SERIAL_PORT_MONITOR
+#define Serial SERIAL_PORT_MONITOR
+#endif
 
 int prevSensorValue=0;
   
