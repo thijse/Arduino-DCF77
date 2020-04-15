@@ -19,7 +19,6 @@
 #define DCF77_USE_RTC // define before #include "DCF77.h"; 
                       // it "enables" RTC and "disables" TimeLib
 #include "DCF77.h"
-#include "TimeLib.h"
 #include <RTCZero.h>
 
 #define DCF_PIN 12                 // Connection pin to DCF 77 device
