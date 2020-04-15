@@ -22,7 +22,10 @@
 #include <Timezone.h>    //https://github.com/JChristensen/Timezone
 
 #define DCF_PIN 2	         // Connection pin to DCF 77 device
-#define DCF_INTERRUPT 0		 // Interrupt number associated with pin
+#define DCF_INTERRUPT digitalPinToInterrupt(DCF_PIN)		 // Interrupt number associated with pin
+#ifdef SERIAL_PORT_MONITOR
+#define Serial SERIAL_PORT_MONITOR
+#endif
 
 // more time zones, see  http://en.wikipedia.org/wiki/Time_zones_of_Europe
 //United Kingdom (London, Belfast)

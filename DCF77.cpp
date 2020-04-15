@@ -19,27 +19,36 @@
   11 Apr 2012 - initial release 
   23 Apr 2012 - added UTC support
   2  Jul 2012 - minor bugfix and additional noise rejection
+
+  modified by DCEM - https://github.com/DCEM/
+  08 Apr 2020
 */
 
 #include <DCF77.h>       //https://github.com/thijse/Arduino-Libraries/downloads
-#include <TimeLib.h>        //http://playground.arduino.cc/code/time
 #include <Utils.h>
+#ifndef DCF77_USE_RTC
+  #include <TimeLib.h>        //http://playground.arduino.cc/code/time
+#else
+  #define now altNow
+#endif	
 
-#define _DCF77_VERSION 1_0_0 // software version of this library
+#define _DCF77_VERSION 1_1_0 // software version of this library
 
 using namespace Utils;
 
 /**
  * Constructor
  */
-DCF77::DCF77(int DCF77Pin, int DCFinterrupt, bool OnRisingFlank) 
+DCF77::DCF77(int DCF77Pin, int DCFinterrupt, bool OnRisingFlank, bool EnableInputPullup, bool CompareToUTC) 
 {
 	dCF77Pin     = DCF77Pin;
 	dCFinterrupt = DCFinterrupt;	
 	pulseStart   = OnRisingFlank ? HIGH : LOW;
+	dCF77PinMode = EnableInputPullup ? INPUT_PULLUP : INPUT;
+	compareToUTC = CompareToUTC;
 	
 	if (!initialized) {  
-		pinMode(dCF77Pin, INPUT);	
+		pinMode(dCF77Pin, dCF77PinMode);
 		initialize();
 	  }
 	initialized = true;
@@ -187,6 +196,10 @@ bool DCF77::receivedTimeUpdate(void) {
 	// Since the received signal is error-prone, and the parity check is not very strong, 
 	// we will do some sanity checks on the time
 	time_t processedTime = latestupdatedTime + (now() - processingTimestamp);
+	if (compareToUTC) {
+		int UTCTimeDifference = (CEST ? 2 : 1)*SECS_PER_HOUR;
+		processedTime = processedTime - UTCTimeDifference;
+	}
 	if (processedTime<MIN_TIME || processedTime>MAX_TIME) {
 		LogLn("Time outside of bounds");
 		return false;
@@ -269,7 +282,12 @@ bool DCF77::processBuffer(void) {
 
 	//  Calculate parities for checking buffer
 	calculateBufferParities();
+	#ifndef DCF77_USE_RTC
 	tmElements_t time;
+	#else
+	tm time;
+	#endif
+
 	bool proccessedSucces;
 
 	struct DCF77Buffer *rx_buffer;
@@ -283,6 +301,7 @@ bool DCF77::processBuffer(void) {
 		rx_buffer->CEST != rx_buffer->CET) 
     { 
       //convert the received buffer into time	  	  	 
+      #ifndef DCF77_USE_RTC
       time.Second = 0;
 	  time.Minute = rx_buffer->Min-((rx_buffer->Min/16)*6);
       time.Hour   = rx_buffer->Hour-((rx_buffer->Hour/16)*6);
@@ -290,6 +309,16 @@ bool DCF77::processBuffer(void) {
       time.Month  = rx_buffer->Month-((rx_buffer->Month/16)*6);
       time.Year   = 2000 + rx_buffer->Year-((rx_buffer->Year/16)*6) -1970;
 	  latestupdatedTime = makeTime(time);	 
+      #else
+      time.tm_sec  = 0; /**< seconds after the minute - [ 0 to 59 ] */
+	  time.tm_min  = rx_buffer->Min-((rx_buffer->Min/16)*6); /**< minutes after the hour - [ 0 to 59 ] */
+      time.tm_hour = rx_buffer->Hour-((rx_buffer->Hour/16)*6);  /**< hours since midnight - [ 0 to 23 ] */
+      time.tm_mday = rx_buffer->Day-((rx_buffer->Day/16)*6);   /**< day of the month - [ 1 to 31 ] */
+      time.tm_mon  = rx_buffer->Month-((rx_buffer->Month/16)*6); /**< months since January - [ 0 to 11 ] */
+      time.tm_year = 2000 + rx_buffer->Year-((rx_buffer->Year/16)*6) - 1900;  /**< years since 1900 */
+      time.tm_isdst = rx_buffer->CEST;  /**< Daylight Saving Time flag */
+	  latestupdatedTime = mktime(&time);	 
+      #endif
 	  CEST = rx_buffer->CEST;
 	  //Parity correct
 	  return true;
@@ -335,12 +364,31 @@ int DCF77::getSummerTime(void)
   return (CEST)?1:0;
 } 
 
+void DCF77::setCallbackFunctionRTC( time_t (*fptr)() ) {
+  fptr_CallbackFunctionRTC = fptr; 
+}
+
+time_t DCF77::altNow() {
+  time_t output;
+  if( 0 != fptr_CallbackFunctionRTC ) {
+    output = (*fptr_CallbackFunctionRTC)();
+  }
+  else {
+  	LogLn('error: callback funtion for RTC needs to be set');
+  }
+  return output;
+}
+
 /**
  * Initialize parameters
  */
 int DCF77::dCF77Pin=0;
 int DCF77::dCFinterrupt=0;
 byte DCF77::pulseStart=HIGH;
+byte DCF77::dCF77PinMode=INPUT;
+bool DCF77::compareToUTC=false;
+typedef time_t (*callback_ptr_type)();
+callback_ptr_type DCF77::fptr_CallbackFunctionRTC = 0;
 
 // Parameters shared between interupt loop and main loop
 

@@ -20,7 +20,10 @@
 #include <TimeLib.h>        //http://www.arduino.cc/playground/Code/Time
 
 #define DCF_PIN 2	         // Connection pin to DCF 77 device
-#define DCF_INTERRUPT 0		 // Interrupt number associated with pin
+#define DCF_INTERRUPT digitalPinToInterrupt(DCF_PIN)		 // Interrupt number associated with pin
+#ifdef SERIAL_PORT_MONITOR
+#define Serial SERIAL_PORT_MONITOR
+#endif
 
 time_t prevDisplay = 0;          // when the digital clock was displayed
 time_t time;

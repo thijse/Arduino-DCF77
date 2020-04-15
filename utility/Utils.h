@@ -6,7 +6,9 @@
 #else
 #include <WProgram.h> 
 #endif
-#include <TimeLib.h>
+#ifndef DCF77_USE_RTC
+  #include <TimeLib.h>        //http://playground.arduino.cc/code/time
+#endif
 
 #define intDisable()      ({ uint8_t sreg = SREG; cli(); sreg; })
 #define intRestore(sreg)  SREG = sreg 
