@@ -5,14 +5,14 @@ namespace Utils {
 #define DEBUG_BLINK_PIN 13	     // Connected to debug led
 //#define VERBOSE_DEBUG 1	     // Verbose
 
-	void LogLn(char*s)
+	void LogLn(const char*s)
 	{
 	#ifdef VERBOSE_DEBUG
 		Serial.println(s);
 	#endif
 	}
 
-	void Log(char*s)
+	void Log(const char*s)
 	{
 	#ifdef VERBOSE_DEBUG
 	  Serial.print(s);

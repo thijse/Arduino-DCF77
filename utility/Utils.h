@@ -12,8 +12,8 @@
 #define intRestore(sreg)  SREG = sreg 
 
 namespace Utils {	
-	void Log(char*s);
-	void LogLn(char*s);
+	void Log(const char*s);
+	void LogLn(const char*s);
 	void Log(int i,char format);
 	void LogLn(int i,char format);
 	void Log(int i);
