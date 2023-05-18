@@ -137,15 +137,17 @@ void DCF77::int0handler() {
  * Add new bit to buffer
  */
 inline void DCF77::appendSignal(unsigned char signal) {
-	Log(signal, DEC);
-	runningBuffer = runningBuffer | ((unsigned long long) signal << bufferPosition);  
-	bufferPosition++;
-	if (bufferPosition > 59) {
-		// Buffer is full before at end of time-sequence 
-		// this may be due to noise giving additional peaks
-		LogLn("EoB");
-		finalizeBuffer();
-	}
+  Log(signal, DEC);
+  if (cb != nullptr) cb->onSignal(signal);
+  runningBuffer = runningBuffer | ((unsigned long long)signal << bufferPosition);
+  bufferPosition++;
+  if (bufferPosition > 59) {
+    // Buffer is full before at end of time-sequence
+    // this may be due to noise giving additional peaks
+    LogLn("EoB");
+    if (cb != nullptr) cb->onBufferMsg("EoB");
+    finalizeBuffer();
+  }
 }
 
 /**
@@ -164,6 +166,7 @@ inline void DCF77::finalizeBuffer(void) {
     } else {
 		// Buffer is not yet full at end of time-sequence
 		LogLn("EoM");
+    if (cb != nullptr) cb->onBufferMsg("EoM");
 		// Reset running buffer
 		bufferinit();      
     }
@@ -333,7 +336,11 @@ time_t DCF77::getUTCTime(void)
 int DCF77::getSummerTime(void) 
 {
   return (CEST)?1:0;
-} 
+}
+
+void DCF77::setCallBack(DCF77EventsCallback *pCallBack) {
+  cb = pCallBack;
+}
 
 /**
  * Initialize parameters
@@ -366,5 +373,6 @@ time_t DCF77::processingTimestamp= 0;
 time_t DCF77::previousProcessingTimestamp=0;
 unsigned char DCF77::CEST=0;
 DCF77::ParityFlags DCF77::flags = {0,0,0,0};
+DCF77EventsCallback *DCF77::cb = nullptr;
 
 
