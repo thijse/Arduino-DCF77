@@ -106,7 +106,7 @@ void DCF77::int0handler() {
 	// If the detected pulse is too short it will be an
 	// incorrect pulse that we shall reject as well
 	if ((flankTime-leadingEdge)<DCFRejectPulseWidth) {
-	    LogLn("rPW");
+	  LogLn("rPW");
 		return;
 	}
 	
@@ -145,7 +145,6 @@ inline void DCF77::appendSignal(unsigned char signal) {
     // Buffer is full before at end of time-sequence
     // this may be due to noise giving additional peaks
     LogLn("EoB");
-    if (cb != nullptr) cb->onBufferMsg("EoB");
     finalizeBuffer();
   }
 }
@@ -155,21 +154,22 @@ inline void DCF77::appendSignal(unsigned char signal) {
  */
 inline void DCF77::finalizeBuffer(void) {
   if (bufferPosition == 59) {
-		// Buffer is full
-		LogLn("BF");
-		// Prepare filled buffer and time stamp for main loop
-		filledBuffer = runningBuffer;
-		filledTimestamp = now();
-		// Reset running buffer
-		bufferinit();
-		FilledBufferAvailable = true;    
-    } else {
-		// Buffer is not yet full at end of time-sequence
-		LogLn("EoM");
+    // Buffer is full
+    LogLn("BF");
+    // Prepare filled buffer and time stamp for main loop
+    filledBuffer = runningBuffer;
+    filledTimestamp = now();
+    // Reset running buffer
+    bufferinit();
+    FilledBufferAvailable = true;
+    if (cb != nullptr) cb->onBufferMsg("BF");
+  } else {
+    // Buffer is not yet full at end of time-sequence
+    LogLn("EoM");
     if (cb != nullptr) cb->onBufferMsg("EoM");
-		// Reset running buffer
-		bufferinit();      
-    }
+    // Reset running buffer
+    bufferinit();
+  }
 }
 
 /**
@@ -184,14 +184,15 @@ bool DCF77::receivedTimeUpdate(void) {
 	// if buffer is filled, we will process it and see if this results in valid parity
 	if (!processBuffer()) {
 		LogLn("Invalid parity");
+    if (cb != nullptr) cb->onParityError();
 		return false;
 	}
-	
 	// Since the received signal is error-prone, and the parity check is not very strong, 
 	// we will do some sanity checks on the time
 	time_t processedTime = latestupdatedTime + (now() - processingTimestamp);
 	if (processedTime<MIN_TIME || processedTime>MAX_TIME) {
 		LogLn("Time outside of bounds");
+    if (cb != nullptr) cb->onParityError();
 		return false;
 	}
 
@@ -200,6 +201,7 @@ bool DCF77::receivedTimeUpdate(void) {
 	if(difference < 2*SECS_PER_MIN) {
 		LogLn("close to internal clock");
 		storePreviousTime();
+    if (cb != nullptr) cb->onTimeUpdateMsg("Close to internal clock");
 		return true;
 	}
 
@@ -211,8 +213,10 @@ bool DCF77::receivedTimeUpdate(void) {
 	storePreviousTime();
 	if(shiftDifference < 2*SECS_PER_MIN) {
 		LogLn("time lag consistent");		
+    if (cb != nullptr) cb->onTimeUpdateMsg("Time lag consistent");
 		return true;
 	} else {
+    if (cb != nullptr) cb->onTimeUpdateMsg("Time lag inconsistent");
 		LogLn("time lag inconsistent");
 	}
 	

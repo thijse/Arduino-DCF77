@@ -103,9 +103,9 @@ public:
 class DCF77EventsCallback {
 public:
     virtual ~DCF77EventsCallback () {};
-    virtual void onGetTime();
     virtual void onParityError();
     virtual void onBufferMsg(const char * msg);
+    virtual void onTimeUpdateMsg(const char * msg);
     virtual void onSignal(unsigned char signal);
 };
 
