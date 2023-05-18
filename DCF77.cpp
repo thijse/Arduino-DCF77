@@ -106,7 +106,7 @@ void DCF77::int0handler() {
 	// If the detected pulse is too short it will be an
 	// incorrect pulse that we shall reject as well
 	if ((flankTime-leadingEdge)<DCFRejectPulseWidth) {
-	    LogLn("rPW");
+	  LogLn("rPW");
 		return;
 	}
 	
@@ -137,15 +137,16 @@ void DCF77::int0handler() {
  * Add new bit to buffer
  */
 inline void DCF77::appendSignal(unsigned char signal) {
-	Log(signal, DEC);
-	runningBuffer = runningBuffer | ((unsigned long long) signal << bufferPosition);  
-	bufferPosition++;
-	if (bufferPosition > 59) {
-		// Buffer is full before at end of time-sequence 
-		// this may be due to noise giving additional peaks
-		LogLn("EoB");
-		finalizeBuffer();
-	}
+  Log(signal, DEC);
+  if (cb != nullptr) cb->onSignal(signal);
+  runningBuffer = runningBuffer | ((unsigned long long)signal << bufferPosition);
+  bufferPosition++;
+  if (bufferPosition > 59) {
+    // Buffer is full before at end of time-sequence
+    // this may be due to noise giving additional peaks
+    LogLn("EoB");
+    finalizeBuffer();
+  }
 }
 
 /**
@@ -153,20 +154,22 @@ inline void DCF77::appendSignal(unsigned char signal) {
  */
 inline void DCF77::finalizeBuffer(void) {
   if (bufferPosition == 59) {
-		// Buffer is full
-		LogLn("BF");
-		// Prepare filled buffer and time stamp for main loop
-		filledBuffer = runningBuffer;
-		filledTimestamp = now();
-		// Reset running buffer
-		bufferinit();
-		FilledBufferAvailable = true;    
-    } else {
-		// Buffer is not yet full at end of time-sequence
-		LogLn("EoM");
-		// Reset running buffer
-		bufferinit();      
-    }
+    // Buffer is full
+    LogLn("BF");
+    // Prepare filled buffer and time stamp for main loop
+    filledBuffer = runningBuffer;
+    filledTimestamp = now();
+    // Reset running buffer
+    bufferinit();
+    FilledBufferAvailable = true;
+    if (cb != nullptr) cb->onBufferMsg("BF");
+  } else {
+    // Buffer is not yet full at end of time-sequence
+    LogLn("EoM");
+    if (cb != nullptr) cb->onBufferMsg("EoM");
+    // Reset running buffer
+    bufferinit();
+  }
 }
 
 /**
@@ -181,14 +184,15 @@ bool DCF77::receivedTimeUpdate(void) {
 	// if buffer is filled, we will process it and see if this results in valid parity
 	if (!processBuffer()) {
 		LogLn("Invalid parity");
+    if (cb != nullptr) cb->onParityError();
 		return false;
 	}
-	
 	// Since the received signal is error-prone, and the parity check is not very strong, 
 	// we will do some sanity checks on the time
 	time_t processedTime = latestupdatedTime + (now() - processingTimestamp);
 	if (processedTime<MIN_TIME || processedTime>MAX_TIME) {
 		LogLn("Time outside of bounds");
+    if (cb != nullptr) cb->onParityError();
 		return false;
 	}
 
@@ -197,6 +201,7 @@ bool DCF77::receivedTimeUpdate(void) {
 	if(difference < 2*SECS_PER_MIN) {
 		LogLn("close to internal clock");
 		storePreviousTime();
+    if (cb != nullptr) cb->onTimeUpdateMsg("Close to internal clock");
 		return true;
 	}
 
@@ -208,8 +213,10 @@ bool DCF77::receivedTimeUpdate(void) {
 	storePreviousTime();
 	if(shiftDifference < 2*SECS_PER_MIN) {
 		LogLn("time lag consistent");		
+    if (cb != nullptr) cb->onTimeUpdateMsg("Time lag consistent");
 		return true;
 	} else {
+    if (cb != nullptr) cb->onTimeUpdateMsg("Time lag inconsistent");
 		LogLn("time lag inconsistent");
 	}
 	
@@ -270,7 +277,6 @@ bool DCF77::processBuffer(void) {
 	//  Calculate parities for checking buffer
 	calculateBufferParities();
 	tmElements_t time;
-	bool proccessedSucces;
 
 	struct DCF77Buffer *rx_buffer;
 	rx_buffer = (struct DCF77Buffer *)(unsigned long long)&processingBuffer;
@@ -333,7 +339,11 @@ time_t DCF77::getUTCTime(void)
 int DCF77::getSummerTime(void) 
 {
   return (CEST)?1:0;
-} 
+}
+
+void DCF77::setCallBack(DCF77EventsCallback *pCallBack) {
+  cb = pCallBack;
+}
 
 /**
  * Initialize parameters
@@ -366,5 +376,6 @@ time_t DCF77::processingTimestamp= 0;
 time_t DCF77::previousProcessingTimestamp=0;
 unsigned char DCF77::CEST=0;
 DCF77::ParityFlags DCF77::flags = {0,0,0,0};
+DCF77EventsCallback *DCF77::cb = nullptr;
 
 

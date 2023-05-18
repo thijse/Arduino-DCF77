@@ -16,6 +16,7 @@
 #define DCFSplitTime 180        // Specifications distinguishes pulse width 100 ms and 200 ms. In practice we see 130 ms and 230
 #define DCFSyncTime 1500        // Specifications defines 2000 ms pulse for end of sequence
 
+class DCF77EventsCallback;
 class DCF77 {
 private:
 
@@ -93,8 +94,20 @@ public:
     static void Start(void);
     static void Stop(void);
     static void int0handler();
-    static int getSummerTime(); 
+    static int getSummerTime();
+    static void setCallBack(DCF77EventsCallback *pCallBack);
+
+    static DCF77EventsCallback *cb;
  };
+
+class DCF77EventsCallback {
+public:
+    virtual ~DCF77EventsCallback () {};
+    virtual void onParityError();
+    virtual void onBufferMsg(const char * msg);
+    virtual void onTimeUpdateMsg(const char * msg);
+    virtual void onSignal(unsigned char signal);
+};
 
 #endif
 

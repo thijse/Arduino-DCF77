@@ -12,11 +12,13 @@
   [
     {
       "name": "Time",
-      "frameworks": "arduino"
+      "frameworks": "arduino",
+      "versions" : "1.6.1"
     },
     {
       "name": "Timezone",
-      "frameworks": "arduino"
+      "frameworks": "arduino",
+      "versions" : "1.2.4"
     }
   ],
   "frameworks": "arduino"
